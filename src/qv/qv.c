@@ -157,7 +157,7 @@ void QF_init(void) {
 //! @static @public @memberof QF
 void QF_stop(void) {
     QF_onCleanup(); // application-specific cleanup callback
-    // nothing else to do for the cooperative QV kernel
+    // nothing else to do for the QV kernel
 }
 
 //${QV::QF-cust::run} ........................................................

@@ -3957,14 +3957,14 @@ for (uint_fast32_t size = poolSize - me-&gt;blockSize;
     ++me-&gt;nTot;              // one more free block in the pool
 }
 
-fb-&gt;next  = (QFreeBlock *)0;    // the last link points to NULL
+fb-&gt;next  = (QFreeBlock *)0; // the last link points to NULL
 #ifndef Q_UNSAFE
 fb-&gt;next_dis = (uintptr_t)(~Q_UINTPTR_CAST_(fb-&gt;next));
 #endif
 
 me-&gt;nFree = me-&gt;nTot;        // all blocks are free
 me-&gt;nMin  = me-&gt;nTot;        // the minimum # free blocks
-me-&gt;start = poolSto;         // the original start this pool buffer
+me-&gt;start = (QFreeBlock *)poolSto; // the original start this pool buffer
 me-&gt;end   = fb;              // the last block in this pool
 
 QF_MEM_APP();
@@ -4078,7 +4078,7 @@ fb-&gt;next_dis = (uintptr_t)(~Q_UINTPTR_CAST_(fb-&gt;next));
 #endif
 
 // set as new head of the free list
-me-&gt;free_head = block;
+me-&gt;free_head = fb;
 
 ++me-&gt;nFree; // one more free block in this pool
 
@@ -4456,7 +4456,7 @@ return e;</code>
 //! @static @private @memberof QF</documentation>
     <!--${QF::QF-dyn::deleteRef_::evtRef}-->
     <parameter name="evtRef" type="void const * const"/>
-    <code>QEvt const * const e = evtRef;
+    <code>QEvt const * const e = (QEvt const *)evtRef;
 
 QF_CRIT_STAT
 QF_CRIT_ENTRY();
@@ -4924,7 +4924,7 @@ QV_INIT(); // port-specific initialization of the QV kernel
 
 //! @static @public @memberof QF</documentation>
     <code>QF_onCleanup(); // application-specific cleanup callback
-// nothing else to do for the cooperative QV kernel</code>
+// nothing else to do for the QV kernel</code>
    </operation>
    <!--${QV::QF-cust::run}-->
    <operation name="run" type="int_t" visibility="0x00" properties="0x01">
@@ -8935,11 +8935,11 @@ $declare1 ${QP-FuSa}
 #define QP_H_
 
 //============================================================================
-#define QP_VERSION     733U
-#define QP_VERSION_STR &quot;7.3.3&quot;
+#define QP_VERSION     734U
+#define QP_VERSION_STR &quot;7.3.4&quot;
 
-//! Encrypted  current QP release (7.3.3) and date (2024-03-01)
-#define QP_RELEASE     0x70C4F752U
+//! Encrypted  current QP release (7.3.4) and date (2024-03-21)
+#define QP_RELEASE     0x70C1EA11U
 
 //============================================================================
 //! @cond INTERNAL
@@ -9678,10 +9678,6 @@ extern char const Q_BUILD_TIME[9];
    <text>#ifndef QPC_H_
 #define QPC_H_
 
-#ifdef __cplusplus
-extern &quot;C&quot; {
-#endif
-
 //============================================================================
 #include &quot;qp_port.h&quot;      // QP port from the port directory
 #include &quot;qsafe.h&quot;        // QP Functional Safety (FuSa) Subsystem
@@ -9839,10 +9835,6 @@ static inline void QF_psInit(
 #endif // QP_API_VERSION &lt; 660
 #endif // QP_API_VERSION &lt; 691
 #endif // QP_API_VERSION &lt; 700
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // QPC_H_</text>
   </file>
